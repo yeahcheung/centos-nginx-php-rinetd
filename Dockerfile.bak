@@ -1,0 +1,21 @@
+FROM daocloud.io/centos:6
+MAINTAINER "Anton Zhang" <306561345@qq.com>
+
+# install nginx
+RUN yum update -y && rpm -Uvh http://nginx.org/packages/centos/6/noarch/RPMS/nginx-release-centos-6-0.el6.ngx.noarch.rpm && yum install -y nginx 
+
+# install php
+RUN rpm -Uvh http://mirrors.ustc.edu.cn/fedora/epel/6/x86_64/epel-release-6-8.noarch.rpm && rpm -Uvh http://mirrors.ustc.edu.cn/fedora/epel/6/x86_64/epel-release-6-8.noarch.rpm
+
+RUN yum install --enablerepo=remi --enablerepo=remi-php56 php php-devel php-mbstring php-mcrypt php-pdo php-fpm php-cli php-gd php-common php-curl php-mysqlnd
+
+# install rinetd
+RUN wget http://www.boutell.com/rinetd/http/rinetd.tar.gz && tar -xf rinetd.tar.gz && cd rinetd && make && make install
+COPY rinetd.conf /etc/rinetd.conf
+
+VOLUME ["/var/cache/nginx"]
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+

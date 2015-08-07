@@ -1,11 +1,11 @@
 FROM daocloud.io/centos:6
 MAINTAINER "Anton Zhang" <306561345@qq.com>
 
-RUN yum update -y && rpm -Uvh http://nginx.org/packages/centos/6/noarch/RPMS/nginx-release-centos-6-0.el6.ngx.noarch.rpm && yum install -y nginx 
-
-VOLUME ["/var/cache/nginx"]
+# install rinetd
+RUN wget http://www.boutell.com/rinetd/http/rinetd.tar.gz && tar -xf rinetd.tar.gz && cd rinetd && make && make install
+COPY rinetd.conf /etc/rinetd.conf
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["rinetd"]
 
