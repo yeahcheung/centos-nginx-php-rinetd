@@ -9,7 +9,9 @@ RUN rpm -Uvh http://mirrors.ustc.edu.cn/fedora/epel/6/x86_64/epel-release-6-8.no
 
 RUN yum install --enablerepo=remi --enablerepo=remi-php56 -y php php-devel php-mbstring php-mcrypt php-pdo php-fpm php-cli php-gd php-common php-curl php-mysqlnd
 
-RUN /bin/cp -f default.conf /etc/nginx/conf.d/
+RUN sed -i "s/daemonize = yes/daemonize = no/g" /etc/php-fpm.conf
+
+RUN rm -f /etc/nginx/conf.d/default.conf && cp default.conf /etc/nginx/conf.d/
 
 # install ssh
 RUN yum install -y openssh-server
@@ -23,9 +25,13 @@ RUN mkdir -p /usr/man/man8 && make && make install
 
 COPY rinetd.conf /etc/rinetd.conf
 
-EXPOSE 80
+# install supervisor
+RUN yum install -y python-setuptools
+RUN easy_install supervisor
 
-CMD ["/sbin/service", "php-fpm", "start"]
-CMD ["/sbin/service", "sshd", "start"]
-CMD ["/usr/sbin/rinetd"]
+COPY supervisord.conf /etc/supervisord.conf
 
+
+EXPOSE 80 22
+
+CMD ["/usr/bin/supervisord"]
