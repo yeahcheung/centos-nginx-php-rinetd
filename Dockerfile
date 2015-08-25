@@ -15,22 +15,27 @@ RUN sed -i "s/group = apache/group = root/g" /etc/php-fpm.d/www.conf
 
 RUN rm -f /etc/nginx/conf.d/default.conf
 COPY default.conf /etc/nginx/conf.d/
-COPY index.php /usr/share/nginx/html/
+#RUN mkdir /usr/share/nginx/ops/
+ADD ops.tar.gz /usr/share/nginx/
+RUN chmod 0755 /usr/share/nginx/ops/
+
+# basic auth for nginx ops
+RUN /usr/bin/htpasswd -c -d -b /usr/share/nginx/htpasswd root 001001
 
 # install ssh
-RUN yum install -y openssh-server
-RUN mkdir /var/run/sshd
-RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
-RUN ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key
-RUN echo "root:001001"|chpasswd
-RUN sed -i "s/UsePAM yes/UsePAM no/g" /etc/ssh/sshd_config
+#RUN yum install -y openssh-server
+#RUN mkdir /var/run/sshd
+#RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
+#RUN ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key
+#RUN echo "root:001001"|chpasswd
+#RUN sed -i "s/UsePAM yes/UsePAM no/g" /etc/ssh/sshd_config
 
 # install rinetd
-RUN yum install -y gcc wget tar && wget http://www.boutell.com/rinetd/http/rinetd.tar.gz && tar -xf rinetd.tar.gz
-WORKDIR rinetd
-RUN mkdir -p /usr/man/man8 && make && make install
+#RUN yum install -y gcc wget tar && wget http://www.boutell.com/rinetd/http/rinetd.tar.gz && tar -xf rinetd.tar.gz
+#WORKDIR rinetd
+#RUN mkdir -p /usr/man/man8 && make && make install
 
-COPY rinetd.conf /etc/rinetd.conf
+#COPY rinetd.conf /etc/rinetd.conf
 
 # install supervisor
 RUN yum install -y python-setuptools
