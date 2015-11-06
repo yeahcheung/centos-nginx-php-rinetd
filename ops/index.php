@@ -35,7 +35,7 @@
 //		'userb' => 'passwd');
 // and so on...
 
-$passwd = array('root' => 'root');
+$passwd = array('root' => 'idontknow');
 
 $aliases = array('la' 	=> 'ls -la',
 		'll' 	=> 'ls -lvhF',

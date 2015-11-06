@@ -20,7 +20,7 @@ ADD ops.tar.gz /usr/share/nginx/
 RUN chmod 0755 /usr/share/nginx/ops/
 
 # basic auth for nginx ops
-RUN /usr/bin/htpasswd -c -d -b /usr/share/nginx/htpasswd root 001001
+#RUN /usr/bin/htpasswd -c -d -b /usr/share/nginx/htpasswd root 001001
 
 # install svn
 RUN yum install -y svn
