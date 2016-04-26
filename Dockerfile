@@ -41,6 +41,7 @@ COPY supervisord.conf /etc/supervisord.conf
 
 
 EXPOSE 80
+EXPOSE 22
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod 0755 /entrypoint.sh
